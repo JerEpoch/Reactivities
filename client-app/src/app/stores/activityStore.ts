@@ -20,6 +20,17 @@ export default class ActivityStore {
       Date.parse(a.date) - Date.parse(b.date));
   }
 
+  get groupedActivities() {
+    return Object.entries(
+      this.activitiesByDate.reduce((activities, activity) => {
+        const date = activity.date;
+        //checks if dates are equal, then adds activity to array. if not create new array with activity
+        activities[date] = activities[date] ? [...activities[date], activity] : [activity];
+        return activities;
+      }, {}as {[key:string]: Activity[]})
+    )
+  }
+
   loadActivities = async () => {
     this.loadingInitial = true;
     try {
